@@ -16,7 +16,7 @@ const addProduct = async(req,res)=>{
     const newProduct = new product({Id,name,price,stock,quantity});
     await newProduct.save();
     res.json({messgae:"Product added sucessfully"});
-}
+};
 
 const deleteProduct = async(req,res) =>{
     console.log("Delete Product api hit");
@@ -27,9 +27,17 @@ const deleteProduct = async(req,res) =>{
     }
     await product.deleteOne({Id});
     res.json({message:"Product added"});
-}
+};
 
 const updateProduct = async(req,res)=>{
     console.log("Update product api hit");
     const{Id} = req.body;
-}
+    const productExists = await product.findOne({Id});
+    if(!productExists){
+        return res.status(400).json({message:"Product upadated"});
+    };
+    await product.updateOne({Id,name,price,stock,quantity});
+    res.json({message:"Product updated"});
+;}
+
+export{addProduct,deleteProduct,updateProduct};
